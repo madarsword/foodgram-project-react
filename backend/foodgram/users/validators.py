@@ -8,7 +8,7 @@ def validate_username(value):
         raise ValidationError(
             ('Имя пользователя не может быть <me>')
         )
-    if re.search(r'^[\w.@+-]+\z', value) is None:
+    if re.search(r'^[\w.@+-]+\Z', value) is None:
         raise ValidationError(
             (f'Недопустимые символы <{value}> в имени пользователя')
         )
