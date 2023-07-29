@@ -55,9 +55,33 @@ class Recipe(models.Model):
 
 
 class Ingredient(models.Model):
-    name =
-    amount = 
-    measurement_unit =
+    name = models.CharField(
+        verbose_name='Ингридиент',
+        max_length=30,
+    )
+    measurement_unit = models.CharField(
+        verbose_name='Единицы измерения',
+        max_length=15,
+    )
+
+    class Meta:
+        verbose_name = 'Ингридиент'
+        verbose_name_plural = 'Ингридиенты'
+        ordering = ('name',)
+        constraints = (
+            models.UniqueConstraint(
+                fields=('name', 'measurement_unit'),
+            ),
+            models.CheckConstraint(
+                check=models.Q(name__length__gt=0),
+            ),
+            models.CheckConstraint(
+                check=models.Q(measurement_unit__length__gt=0),
+            ),
+        )
+
+    def __str__(self) -> str:
+        return f'Имя ингридиента:{self.name}, единица измерения: {self.measurement_unit}'
 
 
 class Favorite(models.Model):
