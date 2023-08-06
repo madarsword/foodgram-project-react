@@ -20,6 +20,7 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'recipes.apps.RecipesConfig',
     'api.apps.ApiConfig',
+    'django-filter',
 ]
 
 AUTH_USER_MODEL = 'users.User'

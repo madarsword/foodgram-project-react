@@ -59,43 +59,31 @@ class Ingredient(models.Model):
 class Recipe(models.Model):
     author = models.ForeignKey(
         User,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
         related_name='recipes',
         verbose_name='Автор рецепта',
-        null=False,
-        blank=False
     )
     ingredients = models.ManyToManyField(
         Ingredient,
         through='RecipeIngredient',
         verbose_name='Ингредиенты',
-        null=False,
-        blank=False
     )
     tags = models.ManyToManyField(
         Tag,
-        verbose_name='Теги',
-        null=False,
-        blank=False
+        verbose_name='Теги'
     )
     image = models.ImageField(
         'Фотография рецепта',
-        upload_to='recipes/images/',
+        upload_to='recipes/',
         null=True,  
-        default=None,
-        null=False,
-        blank=False 
+        default=None
     )
     name = models.CharField(
         'Название рецепта',
-        max_length=200,
-        null=False,
-        blank=False
+        max_length=200
     )
     text = models.CharField(
-        'Описание рецепта',
-        null=False,
-        blank=False
+        'Описание рецепта'
     )
     cooking_time = models.PositiveSmallIntegerField(
         'Время приготовления',

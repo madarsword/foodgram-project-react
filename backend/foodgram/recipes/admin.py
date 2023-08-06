@@ -6,7 +6,7 @@ from recipes.models import (Tag, Ingredient, Recipe,
 
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'color', 'slug',)
+    list_display = ('pk', 'name', 'color', 'slug',)
     search_fields = ('name', 'slug',)
     ordering = ('color',)
     empty_value_display = '-пусто-'
@@ -28,13 +28,17 @@ class RecipeIngredientInline(admin.TabularInline):
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
     list_display = ('pk', 'name', 'author', 'text',
-                    'cooking_time', 'pub_date',)
+                    'cooking_time', 'favorites_count', 'pub_date',)
+    readonly_fields = ('favorites_count',)
     search_fields = ('name', 'author')
     list_filter = ('name', 'author', 'tags')
     empty_value_display = '-пусто-'
     inlines = [
         RecipeIngredientInline,
     ]
+
+    def favorites_count(self, obj):
+        return obj.favorites.count() 
 
 
 @admin.register(RecipeIngredient)
