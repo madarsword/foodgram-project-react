@@ -21,3 +21,7 @@ class IngredientSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     pass
+
+
+class UserCreateSerializer(serializers.ModelSerializer):
+    pass
