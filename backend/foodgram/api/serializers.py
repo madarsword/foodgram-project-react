@@ -18,3 +18,6 @@ class IngredientSerializer(serializers.ModelSerializer):
         model = Ingredient
         fields = '__all__'
 
+
+class UserSerializer(serializers.ModelSerializer):
+    pass
