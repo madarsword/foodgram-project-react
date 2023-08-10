@@ -39,7 +39,7 @@ class User(AbstractUser):
         blank=False,
     )
 
-    USERNAME_FIELD = ('email',)
+    USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ('username', 'first_name', 'last_name',)
 
     class Meta:
