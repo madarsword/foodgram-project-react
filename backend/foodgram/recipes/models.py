@@ -8,17 +8,17 @@ class Tag(models.Model):
     name = models.CharField(
         'Название тега',
         max_length=50,
-        unique=True
+        unique=True,
     )
     color = models.CharField(
         'Цвет тега в HEX',
         max_length=7,
-        unique=True
+        unique=True,
     )
     slug = models.SlugField(
         'Слаг тега',
         max_length=100,
-        unique=True
+        unique=True,
     )
 
     class Meta:
@@ -70,21 +70,21 @@ class Recipe(models.Model):
     )
     tags = models.ManyToManyField(
         Tag,
-        verbose_name='Теги'
+        verbose_name='Теги',
     )
     image = models.ImageField(
         'Фотография рецепта',
         upload_to='recipes/',
         null=True,  
-        default=None
+        default=None,
     )
     name = models.CharField(
         'Название рецепта',
-        max_length=200
+        max_length=200,
     )
     text = models.CharField(
         'Описание рецепта',
-        max_length=255
+        max_length=255,
     )
     cooking_time = models.PositiveSmallIntegerField(
         'Время приготовления',
@@ -95,7 +95,7 @@ class Recipe(models.Model):
         ]
     )
     pub_date = models.DateTimeField(
-        verbose_name='Дата публикации',
+        'Дата публикации',
         auto_now_add=True,
         editable=False,
     )
@@ -120,13 +120,13 @@ class RecipeIngredient(models.Model):
         Recipe,
         on_delete=models.CASCADE,
         related_name='ingredient_list',
-        verbose_name='Рецепт'
+        verbose_name='Рецепт',
     )
     ingredient = models.ForeignKey(
         Ingredient,
         on_delete=models.CASCADE,
         related_name='ingredient_list',
-        verbose_name='Ингредиент'
+        verbose_name='Ингредиент',
     )
     amount = models.PositiveSmallIntegerField(
         'Количество',
@@ -169,7 +169,7 @@ class Favorite(models.Model):
 
     def __str__(self):
         return (f'{self.user.username} добавил '
-                f'{self.recipe.name} в избраннное')
+                f'в избраннное {self.recipe.name}')
 
 
 class ShoppingCart(models.Model):
@@ -177,13 +177,13 @@ class ShoppingCart(models.Model):
         User,
         on_delete=models.CASCADE,
         related_name='carts',
-        verbose_name='Пользователь'
+        verbose_name='Пользователь',
     )
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
         related_name='carts',
-        verbose_name='Рецепт'
+        verbose_name='Рецепт',
     )
 
     class Meta:
@@ -199,4 +199,4 @@ class ShoppingCart(models.Model):
 
     def __str__(self):
         return (f'{self.user.username} добавил'
-                f'{self.recipe.name} в список покупок')
+                f'в список покупок {self.recipe.name}')

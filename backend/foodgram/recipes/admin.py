@@ -6,9 +6,9 @@ from recipes.models import (Tag, Ingredient, Recipe,
 
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'name', 'color', 'slug',)
+    list_display = ('name', 'color', 'slug',)
     search_fields = ('name', 'slug',)
-    ordering = ('color',)
+    ordering = ('name',)
     empty_value_display = '-пусто-'
 
 
@@ -27,15 +27,13 @@ class RecipeIngredientInline(admin.TabularInline):
 
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'name', 'author', 'text',
+    list_display = ('name', 'author', 'text',
                     'cooking_time', 'favorites_count', 'pub_date',)
     readonly_fields = ('favorites_count',)
-    search_fields = ('name', 'author')
-    list_filter = ('name', 'author', 'tags')
+    search_fields = ('name', 'author',)
+    list_filter = ('name', 'author', 'tags',)
     empty_value_display = '-пусто-'
-    inlines = [
-        RecipeIngredientInline,
-    ]
+    inlines = (RecipeIngredientInline,)
 
     def favorites_count(self, obj):
         return obj.favorites.count() 
@@ -43,19 +41,19 @@ class RecipeAdmin(admin.ModelAdmin):
 
 @admin.register(RecipeIngredient)
 class RecipeIngredientAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'recipe', 'ingredient', 'amount')
+    list_display = ('recipe', 'ingredient', 'amount',)
     empty_value_display = '-пусто-'
 
 
 @admin.register(Favorite)
 class FavoriteAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'user', 'recipe')
-    search_fields = ('user', 'recipe')
+    list_display = ('user', 'recipe',)
+    search_fields = ('user', 'recipe',)
     empty_value_display = '-пусто-'
 
 
 @admin.register(ShoppingCart)
 class ShoppingCartAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'user', 'recipe')
-    search_fields = ('user', 'recipe')
+    list_display = ('user', 'recipe',)
+    search_fields = ('user', 'recipe',)
     empty_value_display = '-пусто-'

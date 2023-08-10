@@ -10,7 +10,7 @@ class User(AbstractUser):
         max_length=254,
         unique=True,
         null=False,
-        blank=False
+        blank=False,
     )
     username = models.CharField(
         'Имя пользователя',
@@ -18,28 +18,28 @@ class User(AbstractUser):
         unique=True,
         validators=(validate_username,),
         null=False,
-        blank=False
+        blank=False,
     )
     first_name = models.CharField(
         'Имя',
         max_length=150,
         null=False,
-        blank=False
+        blank=False,
     )
     last_name = models.CharField(
         'Фамилия',
         max_length=150,
         null=False,
-        blank=False
+        blank=False,
     )
     password = models.CharField(
         'Пароль',
         max_length=150,
         null=False,
-        blank=False
+        blank=False,
     )
 
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = ('email',)
     REQUIRED_FIELDS = ('username', 'first_name', 'last_name',)
 
     class Meta:

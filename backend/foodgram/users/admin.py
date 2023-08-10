@@ -20,7 +20,7 @@ class UserAdmin(admin.ModelAdmin):
 
 @admin.register(Subscription)
 class SubscriptionAdmin(admin.ModelAdmin):  
-    list_display = ('user', 'author')
-    list_filter = ('user', 'author')
-    search_fields = ('user', 'author')
+    list_display = ('user', 'author',)
+    list_filter = ('user', 'author',)
+    search_fields = ('user', 'author',)
     empty_value_display = '-пусто-'
