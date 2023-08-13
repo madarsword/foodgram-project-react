@@ -11,12 +11,21 @@ from .serializers import (
     RecipeSerializer,
     RecipeCreateSerializer,
     RecipeReadSerializer,
+    UserSerializer,
+    UserCreateSerializer,
 )   
 from recipes.models import Tag, Ingredient, Recipe
+from users.models import User, Subscription
 
 
 class UserViewSet():
-    pass
+    queryset = User.objects.all()
+    pagination_class = PageLimitPagination
+
+    def get_serializer_class(self):
+        if self.action in ('list', 'retrieve'):
+            return UserSerializer
+        return UserCreateSerializer
 
 
 class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
