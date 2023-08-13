@@ -1,5 +1,6 @@
 from rest_framework import viewsets, filters
 from rest_framework.decorators import action
+from django.db.models import Sum
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django_filters.rest_framework import DjangoFilterBackend
 from django.shortcuts import HttpResponse, get_object_or_404
