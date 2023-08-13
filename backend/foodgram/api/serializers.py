@@ -99,6 +99,18 @@ class IngredientPostSerializer(serializers.ModelSerializer):
         fields = ('id', 'amount')
 
 
+class RecipeSerializer():
+    pass
+
+
+class RecipeReadSerializer():
+    pass
+
+
+class RecipeCreateSerializer():
+    pass
+
+
 class RecipeShortRepresentSerializer(serializers.ModelSerializer):
 
     class Meta:
