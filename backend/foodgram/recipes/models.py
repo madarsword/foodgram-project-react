@@ -58,8 +58,10 @@ class Ingredient(models.Model):
         ]
 
     def __str__(self):
-        return (f'Название ингридиента:{self.name}, '
-                f'единица измерения: {self.measurement_unit}')
+        return (
+            f'Название ингридиента:{self.name}, '
+            f'единица измерения: {self.measurement_unit}'
+        )
 
 
 class Recipe(models.Model):
@@ -183,8 +185,10 @@ class Favorite(models.Model):
         verbose_name_plural = 'Избранное'
 
     def __str__(self):
-        return (f'{self.user.username} добавил '
-                f'в избраннное {self.recipe.name}')
+        return (
+            f'{self.user.username} добавил '
+            f'в избраннное {self.recipe.name}'
+        )
 
 
 class ShoppingCart(models.Model):
@@ -213,5 +217,7 @@ class ShoppingCart(models.Model):
         verbose_name_plural = 'Списки покупок'
 
     def __str__(self):
-        return (f'{self.user.username} добавил'
-                f'в список покупок {self.recipe.name}')
+        return (
+            f'{self.user.username} добавил'
+            f'в список покупок {self.recipe.name}'
+        )
