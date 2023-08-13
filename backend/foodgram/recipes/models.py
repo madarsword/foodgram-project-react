@@ -82,8 +82,7 @@ class Recipe(models.Model):
     image = models.ImageField(
         'Фотография рецепта',
         upload_to='recipes/images/',
-        null=True,  
-        default=None,
+        blank=True,
     )
     name = models.CharField(
         'Название рецепта',
@@ -153,6 +152,9 @@ class RecipeIngredient(models.Model):
                 name='unique_combination'
             )
         ]
+    
+    def __str__(self):
+        return f'{self.ingredient} - {self.amount}'
 
 
 class Favorite(models.Model):
