@@ -1,5 +1,5 @@
 from django.db import models
-from django.core.validators import MinValueValidator
+from django.core.validators import MinValueValidator, RegexValidator
 
 from users.models import User
 
@@ -14,10 +14,16 @@ class Tag(models.Model):
         'Цвет тега в HEX',
         max_length=7,
         unique=True,
+        validators=[
+            RegexValidator(
+                '^#([a-fA-F0-9]{6})',
+                message='Используйте HEX-код для цветов'
+            )
+        ]
     )
     slug = models.SlugField(
         'Слаг тега',
-        max_length=100,
+        max_length=200,
         unique=True,
     )
 
@@ -44,12 +50,12 @@ class Ingredient(models.Model):
         ordering = ('name',)
         verbose_name = 'Ингредиент'
         verbose_name_plural = 'Ингредиенты'
-        constraints = (
+        constraints = [
             models.UniqueConstraint(
                 fields=('name', 'measurement_unit'),
                 name='unique_ingredient',
-            ),
-        )
+            )
+        ]
 
     def __str__(self):
         return (f'Название ингридиента:{self.name}, '
@@ -66,6 +72,7 @@ class Recipe(models.Model):
     ingredients = models.ManyToManyField(
         Ingredient,
         through='RecipeIngredient',
+        through_fields=('recipe', 'ingredient'),
         verbose_name='Ингредиенты',
     )
     tags = models.ManyToManyField(
@@ -74,7 +81,7 @@ class Recipe(models.Model):
     )
     image = models.ImageField(
         'Фотография рецепта',
-        upload_to='recipes/',
+        upload_to='recipes/images/',
         null=True,  
         default=None,
     )
@@ -104,12 +111,12 @@ class Recipe(models.Model):
         ordering = ('-pub_date',)
         verbose_name = 'Рецепт'
         verbose_name_plural = 'Рецепты'
-        constraints = (
+        constraints = [
             models.UniqueConstraint(
                 fields=('name', 'author'),
                 name='unique_recipe',
-            ),
-        )
+            )
+        ]
 
     def __str__(self):
         return self.name
@@ -140,6 +147,12 @@ class RecipeIngredient(models.Model):
     class Meta:
         verbose_name = 'Ингредиент в рецепте'
         verbose_name_plural = 'Ингредиенты в рецепте'
+        constraints = [
+            models.UniqueConstraint(
+                fields=['recipe', 'ingredient'],
+                name='unique_combination'
+            )
+        ]
 
 
 class Favorite(models.Model):
