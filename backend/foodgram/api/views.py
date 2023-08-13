@@ -15,6 +15,10 @@ from .serializers import (
 from recipes.models import Tag, Ingredient, Recipe
 
 
+class UserViewSet():
+    pass
+
+
 class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
@@ -42,5 +46,3 @@ class RecipeViewSet(viewsets.ModelViewSet):
         return RecipeCreateSerializer
 
 
-class UserViewSet():
-    pass
