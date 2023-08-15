@@ -13,8 +13,8 @@ from recipes.models import (
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
     list_display = ('name', 'color', 'slug',)
-    list_filter = ('name', 'color',)
-    search_fields = ('name', 'color',)
+    list_filter = ('name', 'color', 'slug',)
+    search_fields = ('name', 'color', 'slug',)
     ordering = ('name',)
     empty_value_display = '-пусто-'
 
@@ -59,7 +59,9 @@ class RecipeIngredientAdmin(admin.ModelAdmin):
         'recipe',
         'ingredient',
         'amount',
+        'favorites_count',
     )
+    readonly_fields = ('favorites_count',)
     list_filter = ('recipe', 'ingredient')
     search_fields = ('recipe', 'ingredient')
     empty_value_display = '-пусто-'
