@@ -59,15 +59,10 @@ class RecipeIngredientAdmin(admin.ModelAdmin):
         'recipe',
         'ingredient',
         'amount',
-        'favorites_count',
     )
-    readonly_fields = ('favorites_count',)
     list_filter = ('recipe', 'ingredient')
     search_fields = ('recipe', 'ingredient')
     empty_value_display = '-пусто-'
-
-    def favorites_count(self, obj):
-        return obj.favorites.count()
 
 
 @admin.register(Favorite)
