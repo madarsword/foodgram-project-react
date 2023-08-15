@@ -1,4 +1,3 @@
-from django.db import transaction
 from djoser.serializers import UserCreateSerializer, UserSerializer
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
@@ -180,8 +179,8 @@ class UserSubscriptionSerializer(serializers.ModelSerializer):
 
 
 class RecipeGetSerializer(serializers.ModelSerializer):
-    tags = TagSerialiser(many=True, read_only=True)
     author = UserSerializer(read_only=True)
+    tags = TagSerialiser(many=True, read_only=True)
     ingredients = IngredientGetSerializer(
         many=True,
         read_only=True,
@@ -221,13 +220,13 @@ class RecipeGetSerializer(serializers.ModelSerializer):
 
 
 class RecipeCreateSerializer(serializers.ModelSerializer):
+    tags = serializers.PrimaryKeyRelatedField(
+        queryset=Tag.objects.all(),
+        many=True,
+    )
     ingredients = IngredientPostSerializer(
         many=True,
         source='ingredient_list',
-    )
-    tags = serializers.PrimaryKeyRelatedField(
-        queryset=Tag.objects.all(),
-        many=True
     )
     image = Base64ImageField()
 
@@ -236,7 +235,7 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
         fields = (
             'ingredients', 'tags',
             'image', 'name',
-            'text', 'cooking_time'
+            'text', 'cooking_time',
         )
 
     def validate(self, data):
@@ -253,7 +252,6 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
             )
         return data
 
-    @transaction.atomic
     def create(self, validated_data):
         request = self.context.get('request')
         ingredients = validated_data.pop('ingredient_list')
@@ -263,7 +261,6 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
         adding_ingredients(ingredients, recipe)
         return recipe
 
-    @transaction.atomic
     def update(self, instance, validated_data):
         ingredients = validated_data.pop('ingredient_list')
         tags = validated_data.pop('tags')
@@ -281,7 +278,6 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
             instance,
             context={'request': request}
         ).data
-
 
 
 class FavoriteSerializer(serializers.ModelSerializer):
