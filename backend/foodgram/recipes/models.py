@@ -31,6 +31,7 @@ class Tag(models.Model):
         ordering = ('name',)
         verbose_name = 'Тег'
         verbose_name_plural = 'Теги'
+        default_related_name = 'tags'
 
     def __str__(self):
         return f'{self.name}, цвет: {self.color}'
