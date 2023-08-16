@@ -40,6 +40,7 @@ class RecipeAdmin(admin.ModelAdmin):
         'text',
         'cooking_time',
         'favorites_count',
+        'get_tags',
         'pub_date',
     )
     readonly_fields = ('favorites_count',)
