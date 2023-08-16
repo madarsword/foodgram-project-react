@@ -183,6 +183,7 @@ class Favorite(models.Model):
         ]
         verbose_name = 'Избранное'
         verbose_name_plural = 'Избранное'
+        default_related_name = 'favorites'
 
     def __str__(self):
         return (
@@ -215,6 +216,7 @@ class ShoppingCart(models.Model):
         ]
         verbose_name = 'Список покупок'
         verbose_name_plural = 'Списки покупок'
+        default_related_name = 'carts'
 
     def __str__(self):
         return (
