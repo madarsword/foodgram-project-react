@@ -49,7 +49,7 @@ class IngredientGetSerializer(serializers.ModelSerializer):
             'id',
             'name',
             'measurement_unit',
-            'amount'
+            'amount',
         )
 
 
@@ -233,9 +233,9 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recipe
         fields = (
-            'ingredients', 'tags',
-            'image', 'name',
-            'text', 'cooking_time',
+            'name', 'tags',
+            'text', 'ingredients',
+            'image', 'cooking_time',
         )
 
     def validate(self, data):
