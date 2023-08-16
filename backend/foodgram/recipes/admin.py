@@ -12,7 +12,7 @@ from recipes.models import (
 
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
-    list_display = ('name', 'color', 'slug',)
+    list_display = ('id', 'name', 'color', 'slug',)
     list_filter = ('name', 'color', 'slug',)
     search_fields = ('name', 'color', 'slug',)
     ordering = ('name',)
@@ -48,9 +48,13 @@ class RecipeAdmin(admin.ModelAdmin):
     empty_value_display = '-пусто-'
     inlines = (RecipeIngredientInline,)
 
-    @admin.display(description='Количество в избранных')
+    @admin.display(description='Количество в избранном')
     def favorites_count(self, obj):
         return obj.favorites.count()
+    
+    @admin.display(description='Теги')
+    def get_tags(self, obj):
+        return ', '.join(_.name for _ in obj.tags.all())
 
 
 @admin.register(RecipeIngredient)
