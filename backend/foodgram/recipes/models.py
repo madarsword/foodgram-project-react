@@ -93,7 +93,7 @@ class Recipe(models.Model):
     )
     text = models.CharField(
         'Описание рецепта',
-        max_length=255,
+        max_length=1000,
     )
     cooking_time = models.PositiveSmallIntegerField(
         'Время приготовления',
