@@ -12,11 +12,22 @@ class UserAdmin(admin.ModelAdmin):
         'first_name',
         'last_name',
         'password',
+        'subscribers_count',
+        'recipes_count',
     )
+    readonly_fields = ('subscribers_count', 'recipes_count')
     list_editable = ('password',)
     list_filter = ('username', 'email',)
     search_fields = ('username', 'email',)
     empty_value_display = '-пусто-'
+
+    @admin.display(description='Количество подписчиков')
+    def subscribers_count(self, obj):
+        return obj.subscriber.count()
+
+    @admin.display(description='Количество рецептов')
+    def recipes_count(self, obj):
+        return obj.recipes.count()
 
 
 @admin.register(Subscription)
