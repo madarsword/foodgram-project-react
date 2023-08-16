@@ -9,6 +9,7 @@ from rest_framework.decorators import action
 
 from .filters import RecipeFilter
 from .functions import adding_recipe, deleting_recipe
+from .pagination import PageLimitPagination
 from .permissions import IsAdminAuthorOrReadOnly
 from .serializers import (
     IngredientSerializer,
@@ -19,6 +20,9 @@ from .serializers import (
     RecipeCreateSerializer,
     FavoriteSerializer,
     ShoppingCartSerializer,
+    SetPasswordSerializer,
+    UserSerializer,
+    UserCreateSerializer,
 )
 from recipes.models import (
     Tag,
@@ -159,3 +163,82 @@ class RecipeViewSet(viewsets.ModelViewSet):
         response['Content-Disposition'] = \
             'attachment; filename="shopping_cart.txt"'
         return response
+
+
+class UserViewSet(mixins.CreateModelMixin,
+                  mixins.ListModelMixin,
+                  mixins.RetrieveModelMixin,
+                  viewsets.GenericViewSet):
+    queryset = User.objects.all()
+    permission_classes = (AllowAny,)
+    pagination_class = PageLimitPagination
+
+    def get_serializer_class(self):
+        if self.action in ('list', 'retrieve'):
+            return UserSerializer
+        return UserCreateSerializer
+
+    @action(
+        detail=False,
+        methods=['get'],
+        pagination_class=None,
+        permission_classes=[IsAuthenticated]
+    )
+    def me(self, request):
+        serializer = UserSerializer(request.user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(
+        detail=False,
+        methods=['post'],
+        permission_classes=[IsAuthenticated]
+    )
+    def set_password(self, request):
+        serializer = SetPasswordSerializer(request.user, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(
+            {'detail': 'Пароль обновлен'},
+            status=status.HTTP_204_NO_CONTENT)
+
+    @action(
+        detail=False,
+        methods=['get'],
+        permission_classes=[IsAuthenticated],
+        pagination_class=PageLimitPagination
+    )
+    def subscriptions(self, request):
+        queryset = User.objects.filter(subscribing__user=request.user)
+        page = self.paginate_queryset(queryset)
+        serializer = UserSubscriptionGetSerializer(
+            page, many=True,
+            context={'request': request})
+        return self.get_paginated_response(serializer.data)
+
+    @action(
+        detail=True,
+        methods=['post', 'delete'],
+        permission_classes=[IsAuthenticated]
+    )
+    def subscribe(self, request, pk=None):
+        author = get_object_or_404(User, id=pk)
+        if request.method == 'POST':
+            serializer = UserSubscriptionSerializer(
+                author, context={"request": request}
+            ),
+            created = Subscription.objects.get_or_create(
+                user=request.user, author=author
+            )
+            if created:
+                return Response(
+                    serializer.data, status=status.HTTP_201_CREATED)
+            return Response(
+                'Вы уже подписаны на этого автора', status=status.HTTP_200_OK
+            )
+        subscription = get_object_or_404(Subscription, user=request.user,
+                                         author=author)
+        subscription.delete()
+        return Response(
+            {'detail': 'Вы отписались от этого автора'},
+            status=status.HTTP_204_NO_CONTENT
+        )

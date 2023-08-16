@@ -1,3 +1,4 @@
+from django.contrib.auth.password_validation import validate_password
 from djoser.serializers import UserCreateSerializer, UserSerializer
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
@@ -63,6 +64,10 @@ class IngredientPostSerializer(serializers.ModelSerializer):
 
 
 class UserCreateSerializer(UserCreateSerializer):
+    password = serializers.CharField(
+        style={'input_type': 'password'},
+        write_only=True,
+    )
 
     class Meta:
         model = User
@@ -122,13 +127,13 @@ class UserSubscriptionGetSerializer(UserSerializer):
             'id', 'email',
             'username', 'first_name',
             'last_name', 'is_subscribed',
-            'recipes', 'recipes_count'
+            'recipes', 'recipes_count',
         )
         read_only_fields = (
             'email', 'username',
             'first_name', 'last_name',
             'is_subscribed', 'recipes',
-            'recipes_count'
+            'recipes_count',
         )
 
     def get_recipes(self, obj):
@@ -158,6 +163,9 @@ class UserSubscriptionGetSerializer(UserSerializer):
 
 
 class UserSubscriptionSerializer(serializers.ModelSerializer):
+    recipes = RecipeShortSerializer(many=True, read_only=True)
+    recipes_count = serializers.SerializerMethodField()
+    is_subscribed = serializers.SerializerMethodField()
 
     class Meta:
         model = Subscription
@@ -177,6 +185,17 @@ class UserSubscriptionSerializer(serializers.ModelSerializer):
                 'Нельзя подписаться на себя'
             )
         return data
+    
+    def get_recipes_count(self, obj):
+        return obj.recipes.count()
+    
+    def get_is_subscribed(self, obj):
+        request = self.context.get('request')
+        return (
+            request and request.user.is_authenticated
+            and Subscription.objects.filter(user=request.user, author=obj
+                                            ).exists()
+        )
 
     def to_representation(self, instance):
         request = self.context.get('request')
@@ -325,3 +344,32 @@ class ShoppingCartSerializer(serializers.ModelSerializer):
             instance.recipe,
             context={'request': request}
         ).data
+
+
+class SetPasswordSerializer(serializers.Serializer):
+    new_password = serializers.CharField(write_only=True)
+    current_password = serializers.CharField(write_only=True)
+
+    def validate(self, data):
+        new_password = data.get('new_password')
+        try:
+            validate_password(new_password)
+        except Exception as exception:
+            raise serializers.ValidationError(
+                {'new_password': list(exception)})
+        return data
+
+    def update(self, instance, validated_data):
+        if not instance.check_password(
+                validated_data['current_password']):
+            raise serializers.ValidationError(
+                {'current_password': 'Неверный пароль'}
+            )
+        if (validated_data['current_password']
+                == validated_data['new_password']):
+            raise serializers.ValidationError(
+                {'new_password': 'Нельзя использовать старый пароль'}
+            )
+        instance.set_password(validated_data['new_password'])
+        instance.save()
+        return validated_data
