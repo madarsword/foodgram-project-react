@@ -90,7 +90,7 @@ class UserSubscriptionView(APIView):
 
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
-    permission_classes = (IsAdminAuthorOrReadOnly, )
+    permission_classes = (IsAdminAuthorOrReadOnly,)
     filter_backends = (DjangoFilterBackend,)
     filterset_class = RecipeFilter
     http_method_names = ['get', 'post', 'patch', 'delete']
@@ -102,14 +102,13 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
     @action(
         detail=True,
-        methods=('post', 'delete',),
-        permission_classes=(IsAuthenticated,)
+        methods=['post', 'delete'],
+        permission_classes=[IsAuthenticated]
     )
     def favorite(self, request, pk):
         recipe = get_object_or_404(Recipe, id=pk)
         if request.method == 'POST':
             return adding_recipe(request, recipe, FavoriteSerializer)
-
         if request.method == 'DELETE':
             error_message = 'Нет такого рецепта в избранном'
             return deleting_recipe(
@@ -121,8 +120,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
     @action(
         detail=True,
-        methods=('post', 'delete',),
-        permission_classes=(IsAuthenticated,)
+        methods=['post', 'delete'],
+        permission_classes=[IsAuthenticated]
     )
     def shopping_cart(self, request, pk):
         recipe = get_object_or_404(Recipe, id=pk)
@@ -143,8 +142,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
     @action(
         detail=False,
-        methods=('get'),
-        permission_classes=(IsAuthenticated,)
+        methods=['get'],
+        permission_classes=[IsAuthenticated]
     )
     def download_shopping_cart(self, request):
         ingredients = RecipeIngredient.objects.filter(
