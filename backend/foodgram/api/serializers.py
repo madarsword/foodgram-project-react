@@ -113,9 +113,9 @@ class RecipeShortSerializer(serializers.ModelSerializer):
 
 
 class UserSubscriptionGetSerializer(UserSerializer):
-    is_subscribed = serializers.SerializerMethodField()
     recipes = serializers.SerializerMethodField()
     recipes_count = serializers.SerializerMethodField()
+    is_subscribed = serializers.SerializerMethodField()
 
     class Meta:
         model = User
@@ -132,6 +132,7 @@ class UserSubscriptionGetSerializer(UserSerializer):
             'recipes_count'
         )
 
+
     def get_recipes(self, obj):
         request = self.context.get('request')
         recipes_limit = None
@@ -145,9 +146,19 @@ class UserSubscriptionGetSerializer(UserSerializer):
             many=True,
             context={'request': request}
         ).data
-
+    
     def get_recipes_count(self, obj):
         return obj.recipes.count()
+
+    def get_is_subscribed(self, obj):
+        request = self.context.get('request')
+        return (
+            request and request.user.is_authenticated
+            and Subscription.objects.filter(
+            user=request.user,
+            author=obj
+        ).exists()
+        )
 
 
 class UserSubscriptionSerializer(serializers.ModelSerializer):
@@ -188,7 +199,7 @@ class RecipeGetSerializer(serializers.ModelSerializer):
     )
     is_favorited = serializers.SerializerMethodField()
     is_in_shopping_cart = serializers.SerializerMethodField()
-    image = Base64ImageField(required=False)
+    image = Base64ImageField(required=False, allow_null=True)
 
     class Meta:
         model = Recipe
