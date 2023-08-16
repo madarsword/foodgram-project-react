@@ -31,16 +31,6 @@ from recipes.models import (
 from users.models import User, Subscription
 
 
-class UserSubscriptionGetViewSet(
-    mixins.ListModelMixin,
-    viewsets.GenericViewSet
-):
-    serializer_class = UserSubscriptionGetSerializer
-
-    def get_queryset(self):
-        return User.objects.filter(subscription__user=self.request.user)
-
-
 class TagViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerialiser
@@ -55,6 +45,16 @@ class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
     filter_backends = (filters.SearchFilter,)
     search_fields = ('^name',)
     pagination_class = None
+
+
+class UserSubscriptionGetViewSet(
+    mixins.ListModelMixin,
+    viewsets.GenericViewSet
+):
+    serializer_class = UserSubscriptionGetSerializer
+
+    def get_queryset(self):
+        return User.objects.filter(subscription__user=self.request.user)
 
 
 class UserSubscriptionView(APIView):
