@@ -113,6 +113,7 @@ class Recipe(models.Model):
         ordering = ('-pub_date',)
         verbose_name = 'Рецепт'
         verbose_name_plural = 'Рецепты'
+        default_related_name = 'recipes'
         constraints = [
             models.UniqueConstraint(
                 fields=('name', 'author'),
