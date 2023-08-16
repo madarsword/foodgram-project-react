@@ -3,11 +3,11 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-SECRET_KEY = '#gbn=guk68j$463dzhpi_vpjo+=p2taqqn*s+fhmlddats(ehx'
+SECRET_KEY = os.getenv('SECRET_KEY', default='token')
 
-DEBUG = False
+DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '127.0.0.1').split(',')
 
 
 INSTALLED_APPS = [
@@ -67,6 +67,17 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
+# DATABASES = {
+    # 'default': {
+        # 'ENGINE': 'django.db.backends.postgresql',
+        # 'NAME': os.getenv('POSTGRES_DB', 'foodgram'),
+        # 'USER': os.getenv('POSTGRES_USER', 'foodgram_user'),
+        # 'PASSWORD': os.getenv('POSTGRES_PASSWORD', ''),
+        # 'HOST': os.getenv('DB_HOST', 'localhost'),
+        # 'PORT': os.getenv('DB_PORT', 5432),
+    # }
+# }
 
 
 AUTH_PASSWORD_VALIDATORS = [
