@@ -73,10 +73,8 @@ class UserSubscriptionView(APIView):
 
     def delete(self, request, user_id):
         author = get_object_or_404(User, id=user_id)
-        if not Subscription.objects.filter(
-            user=request.user,
-            author=author
-            ).exists():
+        if not Subscription.objects.filter(user=request.user, author=author
+                                           ).exists():
             return Response(
                 {'errors': 'Вы не подписаны на этого автора'},
                 status=status.HTTP_400_BAD_REQUEST

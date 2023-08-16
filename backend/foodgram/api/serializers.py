@@ -94,9 +94,8 @@ class UserSerializer(UserSerializer):
         request = self.context.get('request')
         return (
             request.user.is_authenticated
-            and Subscription.objects.filter(
-            user=request.user, author=obj
-            ).exists()
+            and Subscription.objects.filter(user=request.user, author=obj
+                                            ).exists()
         )
 
 
@@ -132,7 +131,6 @@ class UserSubscriptionGetSerializer(UserSerializer):
             'recipes_count'
         )
 
-
     def get_recipes(self, obj):
         request = self.context.get('request')
         recipes_limit = None
@@ -146,7 +144,7 @@ class UserSubscriptionGetSerializer(UserSerializer):
             many=True,
             context={'request': request}
         ).data
-    
+
     def get_recipes_count(self, obj):
         return obj.recipes.count()
 
@@ -154,10 +152,8 @@ class UserSubscriptionGetSerializer(UserSerializer):
         request = self.context.get('request')
         return (
             request and request.user.is_authenticated
-            and Subscription.objects.filter(
-            user=request.user,
-            author=obj
-        ).exists()
+            and Subscription.objects.filter(user=request.user,author=obj
+                                            ).exists()
         )
 
 
@@ -215,18 +211,16 @@ class RecipeGetSerializer(serializers.ModelSerializer):
         request = self.context.get('request')
         return (
             request and request.user.is_authenticated
-            and Favorite.objects.filter(
-            user=request.user, recipe=obj
-            ).exists()
+            and Favorite.objects.filter(user=request.user, recipe=obj
+                                        ).exists()
         )
 
     def get_is_in_shopping_cart(self, obj):
         request = self.context.get('request')
         return (
             request and request.user.is_authenticated
-            and ShoppingCart.objects.filter(
-            user=request.user, recipe=obj
-            ).exists()
+            and ShoppingCart.objects.filter(user=request.user, recipe=obj
+                                            ).exists()
         )
 
 

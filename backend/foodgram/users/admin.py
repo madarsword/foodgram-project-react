@@ -20,7 +20,7 @@ class UserAdmin(admin.ModelAdmin):
 
 
 @admin.register(Subscription)
-class SubscriptionAdmin(admin.ModelAdmin):  
+class SubscriptionAdmin(admin.ModelAdmin):
     list_display = ('id', 'user', 'author',)
     list_filter = ('user', 'author',)
     search_fields = ('user', 'author',)

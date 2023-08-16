@@ -154,7 +154,7 @@ class RecipeIngredient(models.Model):
                 name='unique_combination'
             )
         ]
-    
+
     def __str__(self):
         return f'{self.ingredient} - {self.amount}'
 

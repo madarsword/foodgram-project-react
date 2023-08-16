@@ -42,8 +42,6 @@ class User(AbstractUser):
         blank=False,
     )
 
-    
-
     class Meta:
         ordering = ('username',)
         verbose_name = 'Пользователь'
@@ -81,6 +79,6 @@ class Subscription(models.Model):
                 name='prevent_self_subscription',
             )
         ]
-    
+
     def __str__(self):
         return f'{self.user} подписан на {self.author}'
