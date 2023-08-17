@@ -12,18 +12,18 @@ class RecipeFilter(FilterSet):
         to_field_name='slug',
     )
     is_favorited = filters.BooleanFilter(
-        method='get_is_favorited'
+        method='get_is_favorited_filter'
     )
     is_in_shopping_cart = filters.BooleanFilter(
-        method='get_is_in_shopping_cart'
+        method='get_is_in_shopping_cart_filter'
     )
 
-    def get_is_favorited(self, queryset, name, value):
+    def get_is_favorited_filter(self, queryset, name, value):
         if value and self.request.user.is_authenticated:
             return queryset.filter(favorites__user=self.request.user)
         return queryset
 
-    def get_is_in_shopping_cart(self, queryset, name, value):
+    def get_is_in_shopping_cart_filter(self, queryset, name, value):
         if value and self.request.user.is_authenticated:
             return queryset.filter(carts__user=self.request.user)
         return queryset
