@@ -5,6 +5,7 @@ from rest_framework import (
     status,
     fields,
     relations,
+    validators,
 )
 
 from .fields import Base64ImageField
@@ -13,6 +14,8 @@ from recipes.models import (
     Tag,
     Ingredient,
     RecipeIngredient,
+    Favorite,
+    ShoppingCart,
 )
 from users.models import User, Subscription
 
@@ -280,3 +283,44 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
         context = {'request': request}
         return RecipeGetSerializer(instance,
                                     context=context).data
+
+
+class FavoriteAddSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Favorite
+        fields = ('user', 'recipe')
+        validators = [
+            validators.UniqueTogetherValidator(
+                queryset=Favorite.objects.all(),
+                fields=['user', 'recipe'],
+                message='Рецепт уже в избранном'
+            )
+        ]
+
+    def to_representation(self, instance):
+        request = self.context.get('request')
+        return RecipeShortSerializer(
+            instance.recipe,
+            context={'request': request}
+        ).data
+
+
+class ShoppingCartAddSerializer(FavoriteAddSerializer):
+
+    class Meta(FavoriteAddSerializer.Meta):
+        model = ShoppingCart
+        validators = [
+            validators.UniqueTogetherValidator(
+                queryset=ShoppingCart.objects.all(),
+                fields=['user', 'recipe'],
+                message='Рецепт уже в списке покупок',
+            )
+        ]
+
+    def to_representation(self, instance):
+        request = self.context.get('request')
+        return RecipeShortSerializer(
+            instance.recipe,
+            context={'request': request}
+        ).data
