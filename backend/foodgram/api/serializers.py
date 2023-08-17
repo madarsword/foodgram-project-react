@@ -259,7 +259,7 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
             ingredient_id = ingredient.get('id')
             if not Ingredient.objects.filter(pk=ingredient_id).exists():
                 raise serializers.ValidationError(
-                    f'Ингредиент с id {ingredient_id} не существует'
+                    f'Ингредиент с id <{ingredient_id}> не существует'
                 )
             ingredients_list.append(ingredient.get('id'))
         if len(set(ingredients_list)) != len(ingredients_list):
