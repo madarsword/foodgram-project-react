@@ -12,34 +12,24 @@ class User(AbstractUser):
         'Адрес электронной почты',
         max_length=254,
         unique=True,
-        null=False,
-        blank=False,
     )
     username = models.CharField(
         'Логин',
         max_length=150,
         unique=True,
         validators=(validate_username,),
-        null=False,
-        blank=False,
     )
     first_name = models.CharField(
         'Имя',
         max_length=150,
-        null=False,
-        blank=False,
     )
     last_name = models.CharField(
         'Фамилия',
         max_length=150,
-        null=False,
-        blank=False,
     )
     password = models.CharField(
         'Пароль',
         max_length=150,
-        null=False,
-        blank=False,
     )
 
     class Meta:

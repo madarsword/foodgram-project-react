@@ -1,4 +1,3 @@
-from colorfield.fields import ColorField
 from django.db import models
 from django.core.validators import MinValueValidator, RegexValidator
 
@@ -11,7 +10,7 @@ class Tag(models.Model):
         max_length=50,
         unique=True,
     )
-    color = ColorField(
+    color = models.CharField(
         'Цвет тега в HEX',
         max_length=7,
         unique=True,
@@ -32,7 +31,6 @@ class Tag(models.Model):
         ordering = ('name',)
         verbose_name = 'Тег'
         verbose_name_plural = 'Теги'
-        default_related_name = 'tags'
 
     def __str__(self):
         return f'{self.name}, цвет: {self.color}'
@@ -94,7 +92,7 @@ class Recipe(models.Model):
     )
     text = models.CharField(
         'Описание рецепта',
-        max_length=1000,
+        max_length=255,
     )
     cooking_time = models.PositiveSmallIntegerField(
         'Время приготовления',
@@ -114,7 +112,6 @@ class Recipe(models.Model):
         ordering = ('-pub_date',)
         verbose_name = 'Рецепт'
         verbose_name_plural = 'Рецепты'
-        default_related_name = 'recipes'
         constraints = [
             models.UniqueConstraint(
                 fields=('name', 'author'),
@@ -186,7 +183,6 @@ class Favorite(models.Model):
         ]
         verbose_name = 'Избранное'
         verbose_name_plural = 'Избранное'
-        default_related_name = 'favorites'
 
     def __str__(self):
         return (
@@ -219,7 +215,6 @@ class ShoppingCart(models.Model):
         ]
         verbose_name = 'Список покупок'
         verbose_name_plural = 'Списки покупок'
-        default_related_name = 'carts'
 
     def __str__(self):
         return (
