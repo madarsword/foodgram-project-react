@@ -107,14 +107,13 @@ class RecipeViewSet(viewsets.ModelViewSet):
         recipe = get_object_or_404(Recipe, id=pk)
         if request.method == 'POST':
             return adding_recipe(request, recipe, FavoriteSerializer)
-        if request.method == 'DELETE':
-            error_message = 'Нет такого рецепта в избранном'
-            return deleting_recipe(
-                request,
-                Favorite,
-                recipe,
-                error_message,
-            )
+        error_message = 'Нет такого рецепта в избранном'
+        return deleting_recipe(
+            request,
+            Favorite,
+            recipe,
+            error_message,
+        )
 
     @action(
         detail=True,
@@ -129,14 +128,13 @@ class RecipeViewSet(viewsets.ModelViewSet):
                 recipe,
                 ShoppingCartSerializer,
             )
-        if request.method == 'DELETE':
-            error_message = 'Нет такого рецепта в списке покупок'
-            return deleting_recipe(
-                request,
-                ShoppingCart,
-                recipe,
-                error_message
-            )
+        error_message = 'Нет такого рецепта в списке покупок'
+        return deleting_recipe(
+            request,
+            ShoppingCart,
+            recipe,
+            error_message
+        )
 
     @action(
         detail=False,
@@ -156,6 +154,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
             amount = ingredient['ingredient_amount']
             shopping_list.append(f'\n{name} - {amount}, {unit}')
         response = HttpResponse(shopping_list, content_type='text/plain')
-        response['Content-Disposition'] = \
+        response['Content-Disposition'] = (
             'attachment; filename="shopping_cart.txt"'
+        )
         return response
