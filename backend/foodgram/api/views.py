@@ -119,8 +119,8 @@ class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
 
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
-    permission_classes = (IsAdminAuthorOrReadOnly,)
     serializer_class = RecipeGetSerializer
+    permission_classes = (IsAdminAuthorOrReadOnly,)
     filterset_class = RecipeFilter
     pagination_class = PageLimitPagination
 

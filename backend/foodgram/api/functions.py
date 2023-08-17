@@ -15,10 +15,14 @@ def add_remove(add_serializer, model, request, recipe_id):
     if request.method == 'POST':
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return response.Response(serializer.data,
-                                 status=status.HTTP_201_CREATED)
+        return response.Response(
+            serializer.data,
+            status=status.HTTP_201_CREATED
+        )
     get_object_or_404(
-        model, user=user, recipe=get_object_or_404(Recipe, id=recipe_id)
+        model,
+        user=user,
+        recipe=get_object_or_404(Recipe, id=recipe_id)
     ).delete()
     return response.Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -38,7 +42,8 @@ def shopping_list(self, request, ingredients):
     ])
     shopping_list += f'\n\nFoodgram ({today:%Y})'
     response = HttpResponse(
-        shopping_list, content_type='text.txt; charset=utf-8'
+        shopping_list,
+        content_type='text.txt; charset=utf-8'
     )
     response['Content-Disposition'] = f'attachment; filename={filename}'
     return response

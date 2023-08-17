@@ -1,3 +1,4 @@
+from colorfield.fields import ColorField
 from django.db import models
 from django.core.validators import MinValueValidator, RegexValidator
 
@@ -10,7 +11,7 @@ class Tag(models.Model):
         max_length=50,
         unique=True,
     )
-    color = models.CharField(
+    color = ColorField(
         'Цвет тега в HEX',
         max_length=7,
         unique=True,
