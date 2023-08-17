@@ -60,7 +60,7 @@ class IngredientPostSerializer(serializers.ModelSerializer):
     class Meta:
         model = RecipeIngredient
         fields = ('id', 'amount')
-    
+
     def validate(self, data):
         ingredients_list = []
         for ingredient in data.get('ingredient_list'):
@@ -267,7 +267,7 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
                 'В рецепте не должно быть 2 одинаковых ингредиента'
             )
         return data
-    
+
     def validate_name(self, value):
         if Recipe.objects.filter(name=value).exists():
             raise serializers.ValidationError(

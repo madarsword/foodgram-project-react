@@ -35,7 +35,7 @@ def adding_recipe(request, instance, serializer_class):
 
 def deleting_recipe(request, model_class, instance, error_message):
     if not model_class.objects.filter(user=request.user,
-                                     recipe=instance).exists():
+                                      recipe=instance).exists():
         return Response({'errors': error_message},
                         status=status.HTTP_400_BAD_REQUEST)
     model_class.objects.filter(user=request.user, recipe=instance).delete()
