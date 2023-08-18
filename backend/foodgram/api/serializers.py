@@ -60,7 +60,7 @@ class IngredientPostSerializer(serializers.ModelSerializer):
     class Meta:
         model = RecipeIngredient
         fields = ('id', 'amount')
-    
+
     def validate_id(self, value):
         if not Ingredient.objects.filter(pk=value).exists():
             raise serializers.ValidationError(
@@ -252,7 +252,7 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
             'text', 'ingredients',
             'image', 'cooking_time',
         )
-    
+
     def validate_ingredients(self, value):
         if not value:
             raise exceptions.ValidationError(
@@ -261,7 +261,7 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
         ingredients_list = []
         for item in value:
             ingredient = item['ingredient']
-            if ingredient in ingredients_list :
+            if ingredient in ingredients_list:
                 raise serializers.ValidationError(
                     'В списке ингредиентов есть повторяющиеся элементы.'
                 )
