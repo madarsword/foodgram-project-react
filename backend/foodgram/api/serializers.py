@@ -1,5 +1,5 @@
 from djoser.serializers import UserCreateSerializer, UserSerializer
-from rest_framework import serializers
+from rest_framework import serializers, exceptions
 from rest_framework.validators import UniqueTogetherValidator
 
 from .fields import Base64ImageField
@@ -60,20 +60,20 @@ class IngredientPostSerializer(serializers.ModelSerializer):
     class Meta:
         model = RecipeIngredient
         fields = ('id', 'amount')
-
-    def validate(self, data):
-        ingredients_list = []
-        for ingredient in data.get('ingredient_list'):
-            if ingredient.get('amount') <= 0:
-                raise serializers.ValidationError(
-                    'Количество ингредиентов не должно быть меньше 1'
-                )
-            ingredients_list.append(ingredient.get('id'))
-        if len(set(ingredients_list)) != len(ingredients_list):
+    
+    def validate_id(self, value):
+        if not Ingredient.objects.filter(pk=value).exists():
             raise serializers.ValidationError(
-                'В рецепте не должно быть 2 одинаковых ингредиента'
+                f'Ингредиент с id <{value}> не существует'
             )
-        return data
+        return value
+
+    def validate_amount(self, value):
+        if value <= 0:
+            raise serializers.ValidationError(
+                'Количество ингредиентов не должно быть меньше 1'
+            )
+        return value
 
 
 class UserCreateSerializer(UserCreateSerializer):
@@ -252,21 +252,19 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
             'text', 'ingredients',
             'image', 'cooking_time',
         )
-
-    def validate(self, data):
-        ingredients_list = []
-        for ingredient in data.get('ingredient_list'):
-            ingredient_id = ingredient.get('id')
-            if not Ingredient.objects.filter(pk=ingredient_id).exists():
-                raise serializers.ValidationError(
-                    f'Ингредиент с id <{ingredient_id}> не существует'
-                )
-            ingredients_list.append(ingredient.get('id'))
-        if len(set(ingredients_list)) != len(ingredients_list):
-            raise serializers.ValidationError(
-                'В рецепте не должно быть 2 одинаковых ингредиента'
+    
+    def validate_ingredients(self, value):
+        if not value:
+            raise exceptions.ValidationError(
+                'Добавьте хотя бы 1 ингредиент'
             )
-        return data
+        ingredients = [item['id'] for item in value]
+        for ingredient in ingredients:
+            if ingredients.count(ingredient) > 1:
+                raise exceptions.ValidationError(
+                    'В рецепте не должно быть 2 одинаковых ингредиента'
+                )
+        return value
 
     def validate_name(self, value):
         if Recipe.objects.filter(name=value).exists():
