@@ -246,20 +246,19 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
             'image', 'cooking_time',
         )
 
-    def validate_ingredients(self, value):
-        if not value:
+    def validate_ingredients(self, data):
+        if not data:
             raise exceptions.ValidationError(
                 'Добавьте хотя бы 1 ингредиент'
             )
-        ingredients_id = []
-        for item in value:
-            ingredient_id = item['id']
-            if ingredient_id in ingredients_id:
-                raise serializers.ValidationError(
-                    'В списке ингредиентов есть повторяющиеся элементы.'
-                )
-            ingredients_id.append(ingredient_id)
-        return value
+        id_ingredients = []
+        for ingredient in data:
+            id_ingredients.append(ingredient['id'])
+        if len(id_ingredients) > len(set(id_ingredients)):
+            raise serializers.ValidationError(
+                {'error': 'Не должно быть 2 одинаковых ингредиента'}
+            )
+        return data
 
     def validate_name(self, value):
         if Recipe.objects.filter(name=value).exists():
