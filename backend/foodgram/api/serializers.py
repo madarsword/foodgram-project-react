@@ -258,14 +258,14 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
             raise exceptions.ValidationError(
                 'Добавьте хотя бы 1 ингредиент'
             )
-        ingredients_list = []
+        ingredients = []
         for item in value:
-            ingredient = item['ingredient']
-            if ingredient in ingredients_list:
+            ingredient = item['id']
+            if ingredient in ingredients:
                 raise serializers.ValidationError(
                     'В списке ингредиентов есть повторяющиеся элементы.'
                 )
-            ingredients_list.append(ingredient)
+            ingredients.append(ingredient)
         return value
 
     def validate_name(self, value):
