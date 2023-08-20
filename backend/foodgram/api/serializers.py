@@ -256,7 +256,7 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
             ingredients_id.append(ingredient['id'])
         if len(ingredients_id) > len(set(ingredients_id)):
             raise serializers.ValidationError(
-                {'error': 'Не должно быть 2 одинаковых ингредиента'}
+                'В рецепте не должно быть 2 одинаковых ингредиента'
             )
         return data
 
