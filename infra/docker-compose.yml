@@ -7,13 +7,25 @@ services:
       - db_data:/var/lib/postgresql/data/
     env_file:
       - ./.env
+  
+  backend:
+    image: aleksandrshpr/foodgram_backend
+    restart: always
+    volumes:
+      - static_value:/app/static/
+      - media_value:/app/media/
+    depends_on:
+      - db
+    env_file:
+      - ./.env
 
   frontend:
-    build:
-      context: ../frontend
-      dockerfile: Dockerfile
-    volumes:
-      - ../frontend/:/app/result_build/
+      image: aleksandrshpr/foodgram_frontend
+      volumes:
+        - ../frontend/:/app/result_build/
+      depends_on:
+        - backend
+
   nginx:
     image: nginx:1.19.3
     ports:
