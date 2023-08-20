@@ -55,7 +55,7 @@ class IngredientGetSerializer(serializers.ModelSerializer):
 
 class IngredientPostSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField()
-    amount = serializers.IntegerField()
+    amount = serializers.IntegerField(min_value=1)
 
     class Meta:
         model = RecipeIngredient
@@ -65,13 +65,6 @@ class IngredientPostSerializer(serializers.ModelSerializer):
         if not Ingredient.objects.filter(pk=value).exists():
             raise serializers.ValidationError(
                 f'Ингредиент с id <{value}> не существует'
-            )
-        return value
-
-    def validate_amount(self, value):
-        if value <= 0:
-            raise serializers.ValidationError(
-                'Количество ингредиентов не должно быть меньше 1'
             )
         return value
 
@@ -258,14 +251,14 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
             raise exceptions.ValidationError(
                 'Добавьте хотя бы 1 ингредиент'
             )
-        ingredients = []
+        ingredients_id = []
         for item in value:
-            ingredient = item['id']
-            if ingredient in ingredients:
+            ingredient_id = item['id']
+            if ingredient_id in ingredients_id:
                 raise serializers.ValidationError(
                     'В списке ингредиентов есть повторяющиеся элементы.'
                 )
-            ingredients.append(ingredient)
+            ingredients_id.append(ingredient_id)
         return value
 
     def validate_name(self, value):
