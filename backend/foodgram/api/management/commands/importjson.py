@@ -4,11 +4,11 @@ import os
 from django.conf import settings
 from django.core.management import BaseCommand, CommandError
 from django.db.utils import IntegrityError
-
 from recipes.models import Ingredient
 
-
-FILE_DIR = os.path.join(os.path.dirname(os.path.dirname(settings.BASE_DIR)), 'data')
+FILE_DIR = os.path.join(
+    os.path.dirname(os.path.dirname(settings.BASE_DIR)), 'data'
+)
 
 
 def import_json():
@@ -23,6 +23,7 @@ def import_json():
 
 class Command(BaseCommand):
     help = 'Импорт данных из json в базу данных'
+
     def handle(self, *args, **kwargs):
         self.stdout.write(self.style.WARNING('Начало выгрузки'))
         try:

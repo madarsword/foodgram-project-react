@@ -147,3 +147,6 @@ dmypy.json
 
 # Others
 node_modules
+
+backend/media
+backend/foodgram/media

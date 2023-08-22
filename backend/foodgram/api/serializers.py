@@ -1,18 +1,12 @@
 from djoser.serializers import UserCreateSerializer, UserSerializer
-from rest_framework import serializers, exceptions
+from recipes.models import (Favorite, Ingredient, Recipe, RecipeIngredient,
+                            ShoppingCart, Tag)
+from rest_framework import exceptions, serializers
 from rest_framework.validators import UniqueTogetherValidator
+from users.models import Subscription, User
 
 from .fields import Base64ImageField
 from .functions import adding_ingredients
-from recipes.models import (
-    Tag,
-    Ingredient,
-    RecipeIngredient,
-    Recipe,
-    Favorite,
-    ShoppingCart,
-)
-from users.models import User, Subscription
 
 
 class TagSerialiser(serializers.ModelSerializer):
