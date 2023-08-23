@@ -69,6 +69,7 @@ jobs:
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
+          target: "foodgram-project-react"
           debug: true
           script: |
             cd foodgram
