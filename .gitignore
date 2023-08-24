@@ -128,25 +128,13 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# Папки, создаваемые средой разработки
+# .idea
 .idea
-.DS_Store
-.AppleDouble
-.LSOverride
 
-*.sublime-project
-*.sublime-workspace
-
+# VSC
+/.vscode/
 .vscode/
-*.code-workspace
 
-# Local History for Visual Studio Code
-.history/
-
-.mypy_cache
-
-# Others
-node_modules
-
-backend/media
-backend/foodgram/media
+# папки со статикой и медиа
+media/
+static/
