@@ -8,7 +8,7 @@ on:
 jobs:
   tests:
     runs-on: ubuntu-latest
-    postgres:
+    db:
         image: postgres:13
         env:
           POSTGRES_USER: foodgram_user
