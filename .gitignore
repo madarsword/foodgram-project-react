@@ -135,6 +135,5 @@ dmypy.json
 /.vscode/
 .vscode/
 
-# папки со статикой и медиа
 media/
 static/

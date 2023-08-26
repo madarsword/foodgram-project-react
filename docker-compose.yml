@@ -29,4 +29,4 @@ services:
       - static:/staticfiles/
       - media:/media
     ports:
-      - 7000:80
+      - 8000:80
