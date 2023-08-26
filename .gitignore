@@ -130,10 +130,7 @@ dmypy.json
 
 # .idea
 .idea
-
-# VSC
-/.vscode/
 .vscode/
-
-media/
-static/
+backend/media/
+backend/collected_static/
+frontend/node_modules/
