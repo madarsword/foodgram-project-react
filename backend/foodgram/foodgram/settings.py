@@ -71,8 +71,8 @@ if os.getenv('POSTGRES_ON', 'False') == 'True':
             'ENGINE': 'django.db.backends.postgresql',
             'NAME': os.getenv('POSTGRES_DB', 'foodgram'),
             'USER': os.getenv('POSTGRES_USER', 'foodgram_user'),
-            'PASSWORD': os.getenv('POSTGRES_PASSWORD', ''),
-            'HOST': os.getenv('DB_HOST', 'localhost'),
+            'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'foodgram_password'),
+            'HOST': os.getenv('DB_HOST', 'db'),
             'PORT': os.getenv('DB_PORT', 5432),
         }
     }
