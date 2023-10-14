@@ -1,25 +1,34 @@
 import csv
-import os
 
-from django.conf import settings
-from django.core.management.base import BaseCommand
-
-from recipes.models import Ingredient
+from django.apps import apps
+from django.core.management import BaseCommand
+from django.shortcuts import get_object_or_404
 
 
-def process_file(name: str):
-    return csv.reader(open(os.path.join(
-        settings.BASE_DIR, 'recipes/data/', name), 'r', encoding='utf-8'),
-        delimiter=',')
+MODELS_FIELDS = {}
 
 
 class Command(BaseCommand):
+    help = 'Создание объектов модели'
+
+    def add_arguments(self, parser):
+        parser.add_argument('--path', type=str, help="file path")
+        parser.add_argument('--model_name', type=str, help="model name")
+        parser.add_argument(
+            '--app_name',
+            type=str,
+            help="Название приложения, к которому подключена модель"
+        )
+
     def handle(self, *args, **options):
-        csv = process_file('ingredients.csv')
-        next(csv, None)
-        for row in csv:
-            obj, created = Ingredient.objects.get_or_create(
-                name=row[0],
-                measurement_unit=row[1]
-            )
-        print('Выгрузка ингридиентов выполнена')
+        file_path = options['path']
+        model = apps.get_model(options['app_name'], options['model_name'])
+        with open(file_path, 'rt', encoding='utf-8') as csv_file:
+            reader = csv.DictReader(csv_file, delimiter=',')
+            for row in reader:
+                for field, value in row.items():
+                    if field in MODELS_FIELDS.keys():
+                        row[field] = get_object_or_404(
+                            MODELS_FIELDS[field], pk=value
+                        )
+                model.objects.create(**row)
