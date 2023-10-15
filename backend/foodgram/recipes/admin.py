@@ -30,7 +30,6 @@ class RecipeAdmin(admin.ModelAdmin):
     list_display = (
         'name',
         'author',
-        'tags',
         'text',
         'cooking_time',
         'favorites_count',

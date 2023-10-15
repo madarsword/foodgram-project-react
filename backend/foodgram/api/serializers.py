@@ -1,4 +1,6 @@
-from djoser.serializers import UserCreateSerializer, UserSerializer
+#from djoser.serializers import UserCreateSerializer, UserSerializer
+from djoser.serializers import UserSerializer as DjoserUserSerializer
+from djoser.serializers import UserCreateSerializer as DjoserUserCreateSerializer
 from recipes.models import (Favorite, Ingredient, Recipe, RecipeIngredient,
                             ShoppingCart, Tag)
 from rest_framework import serializers
@@ -63,7 +65,7 @@ class IngredientPostSerializer(serializers.ModelSerializer):
         return value
 
 
-class UserCreateSerializer(UserCreateSerializer):
+class UserCreateSerializer(DjoserUserCreateSerializer):
 
     class Meta:
         model = User
@@ -77,7 +79,7 @@ class UserCreateSerializer(UserCreateSerializer):
         )
 
 
-class UserSerializer(UserSerializer):
+class UserSerializer(DjoserUserSerializer):
     is_subscribed = serializers.SerializerMethodField()
 
     class Meta:
@@ -95,7 +97,7 @@ class UserSerializer(UserSerializer):
         request = self.context.get('request')
         return (
             request.user.is_authenticated
-            and obj.subscription.filter(user=request.user).exists()
+            and obj.subscription.filter(user=request.user, author=obj).exists()
         )
 
 
@@ -210,14 +212,14 @@ class RecipeGetSerializer(serializers.ModelSerializer):
         request = self.context.get('request')
         return (
             request and request.user.is_authenticated
-            and obj.favorites.filter(user=request.user).exists()
+            and obj.favorites.filter(user=request.user, recipe=obj).exists()
         )
 
     def get_is_in_shopping_cart(self, obj):
         request = self.context.get('request')
         return (
             request and request.user.is_authenticated
-            and obj.carts.filter(user=request.user).exists()
+            and obj.carts.filter(user=request.user, recipe=obj).exists()
         )
 
 
