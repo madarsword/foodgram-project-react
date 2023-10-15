@@ -1,7 +1,7 @@
 from djoser.serializers import UserCreateSerializer, UserSerializer
 from recipes.models import (Favorite, Ingredient, Recipe, RecipeIngredient,
                             ShoppingCart, Tag)
-from rest_framework import exceptions, serializers
+from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 from users.models import Subscription, User
 
@@ -242,7 +242,7 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
 
     def validate_ingredients(self, data):
         if not data:
-            raise exceptions.ValidationError(
+            raise serializers.ValidationError(
                 'Добавьте хотя бы 1 ингредиент'
             )
         ingredients_id = []
