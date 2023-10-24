@@ -1,4 +1,3 @@
-#from djoser.serializers import UserCreateSerializer, UserSerializer
 from djoser.serializers import UserSerializer as DjoserUserSerializer
 from djoser.serializers import UserCreateSerializer as DjoserUserCreateSerializer
 from recipes.models import (Favorite, Ingredient, Recipe, RecipeIngredient,
@@ -97,7 +96,9 @@ class UserSerializer(DjoserUserSerializer):
         request = self.context.get('request')
         return (
             request.user.is_authenticated
-            and obj.subscription.filter(user=request.user, author=obj).exists()
+            and obj.subscription.filter(
+            user=request.user, author=obj
+            ).exists()
         )
 
 
