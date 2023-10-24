@@ -55,8 +55,8 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.SSH_PASSPHRASE }}
           script: |
-            sudo docker compose stop
-            sudo docker compose rm backend
+            sudo docker compose -f docker-compose.yml stop
+            sudo docker compose -f docker-compose.yml rm backend
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/backend
             touch .env
             echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
@@ -65,16 +65,4 @@ jobs:
             echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env
             echo DB_HOST=${{ secrets.DB_HOST }} >> .env
             echo DB_PORT=${{ secrets.DB_PORT }} >> .env
-            sudo docker compose up -d
-
-  send_message:
-    runs-on: ubuntu-latest
-    needs: deploy
-    if: github.ref == 'refs/heads/master'
-    steps:
-      - name: send message
-        uses: appleboy/telegram-action@master
-        with:
-          to: ${{ secrets.TELEGRAM_TO }}
-          token: ${{ secrets.TELEGRAM_TOKEN }}
-          message: ${{ github.workflow }} успешно выполнен
+            sudo docker compose -f docker-compose.yml up -d
