@@ -244,7 +244,7 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
         )
 
     def validate_ingredients(self, data):
-        if not data:
+        if data is None:
             raise serializers.ValidationError(
                 'Добавьте хотя бы 1 ингредиент'
             )
