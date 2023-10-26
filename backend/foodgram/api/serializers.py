@@ -257,13 +257,13 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
                 'В рецепте не должно быть 2 одинаковых ингредиента'
             )
         return data
-    
+
     def validate_name(self, value):
         instance = self.instance
         if Recipe.objects.filter(name=value).exclude(pk=instance.pk).exists():
             raise serializers.ValidationError(
-            'Рецепт с таким названием уже существует'
-        )
+                'Рецепт с таким названием уже существует'
+            )
         return value
 
     def create(self, validated_data):
