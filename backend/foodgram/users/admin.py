@@ -19,9 +19,6 @@ class UserAdmin(MainUserAdmin):
     search_fields = ('username', 'email',)
     empty_value_display = '-пусто-'
 
-    def password(self, obj):
-        return obj.password
-
 
 @admin.register(Subscription)
 class SubscriptionAdmin(admin.ModelAdmin):

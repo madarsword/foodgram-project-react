@@ -1,7 +1,7 @@
 # Данные для ревью:
-> foodgramshpr.hopto.org
-> aleksandrshpr@yandex.ru
-> 36vdfbdfbdf16sdfsdfgsdf26
+- foodgramshpr.hopto.org
+- aleksandrshpr@yandex.ru
+- 36vdfbdfbdf16sdfsdfgsdf26
 
 # Описание проекта
 ## «Фудграм» — сайт, на котором пользователи публикуют рецепты, добавляют чужие рецепты в избранное и подписываются на публикации других авторов. Пользователям сайта доступен сервис «Список покупок». Он позволяет скачивать список продуктов, которые нужно купить для приготовления выбранных блюд.
@@ -25,18 +25,18 @@
 > nginx.conf
 
 ### Добавьте секреты в GitHub Actions:
-> DB_ENGINE=django.db.backends.postgresql
-> DB_HOST=название БД (контейнера) 
-> DB_NAME=имя БД
-> DB_PORT=порт для подключения к БД
-> DOCKER_PASSWORD=пароль от Docker Hub
-> DOCKER_USERNAME=логин от Docker Hub
-> HOST=IP-адрес сервера
-> POSTGRES_PASSWORD=пароль для подключения к БД
-> POSTGRES_USER=логин для подключения к БД
-> SSH_KEY=SSH-ключ
-> SSH_PASSPHRASE=фраза-пароль для SSH
-> USER=логин на удалённом сервере
+- DB_ENGINE=django.db.backends.postgresql
+- DB_HOST=название БД (контейнера) 
+- DB_NAME=имя БД
+- DB_PORT=порт для подключения к БД
+- DOCKER_PASSWORD=пароль от Docker Hub
+- DOCKER_USERNAME=логин от Docker Hub
+- HOST=IP-адрес сервера
+- POSTGRES_PASSWORD=пароль для подключения к БД
+- POSTGRES_USER=логин для подключения к БД
+- SSH_KEY=SSH-ключ
+- SSH_PASSPHRASE=фраза-пароль для SSH
+- USER=логин на удалённом сервере
 
 ### Обновите данные репозитория:
 ```
@@ -68,8 +68,8 @@ sudo docker compose exec backend python manage.py import_ingredients --path data
 > git clone git@github.com:madarsword/foodgram-project-react.git
 
 ### Перейдите в директории:
-> cd foodgram-project-react
-> cd infra
+- cd foodgram-project-react
+- cd infra
 
 ### Запустите оркестрацию:
 > docker compose up
